@@ -30,7 +30,7 @@ def top10MostExpensiveUS(dir):
 
     return result[:10]
 
-if len(sys.argv) < 2:
+""" if len(sys.argv) < 2:
     print("Usage: spark-submit top10MostExpensiveUS.py <dataset dir>")
 
 
@@ -41,4 +41,4 @@ plt.xlabel('Company')
 plt.ylabel('Max Price')
 plt.title('top10MostExpensiveUS')
 plt.xticks(rotation=45, ha="right")
-plt.savefig('top10MostExpensiveUS.png')
+plt.savefig('top10MostExpensiveUS.png') """
