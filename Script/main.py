@@ -1,6 +1,6 @@
 import os
-from top10MostExpensiveUS import top10MostExpensiveUS
-from top10MostExpensiveUSYear import top10MostExpensiveUSYear
+from top10MostExpensive import top10MostExpensive
+from top10MostExpensiveYear import top10MostExpensiveYear
 from predictionUSYear import predictionUSYear
 
 # TODO: cambiar los prints y completar opciones
@@ -26,14 +26,14 @@ def main():
 
         if opcion == "1":
             # Unir las 2 listas
-            global_tops = top10MostExpensiveUS(path+"/US_data")
+            global_tops = top10MostExpensive(path)
             sorted(global_tops, key=lambda x : x[1], reverse=True)
             global_tops = global_tops[:10]
             print(global_tops)
 
         elif opcion == "2":
             year = input("Ingrese el año: ")
-            us_tops = top10MostExpensiveUSYear(path + "/US_data", year)
+            us_tops = top10MostExpensiveYear(path, year)
             print(us_tops)
 
         elif opcion == "3":
