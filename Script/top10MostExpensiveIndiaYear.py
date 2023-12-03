@@ -24,25 +24,33 @@ def top10MostExpensiveIndiaYear(dir, year):
             maxprice = df.filter(col("date") == year).select("max(close)").collect()[0][0]
             maxprice = round(float(maxprice), 3)
 
-            result.append((file.split(".")[0], maxprice))
+            result.append((file.split("_")[0], maxprice))
 
     result = sorted(result, key=lambda x : x[1], reverse=True)
-
-    #print(result[:10])
+    
     spark.stop()
 
     return result[:10]
 
-if __name__ == "__main__":
-    if len(sys.argv) < 3:
-        print("Usage: spark-submit top10MostExpensiveIndiaYear.py <dataset dir> <year>")
-
-    result = top10MostExpensiveIndiaYear(sys.argv[1], sys.argv[2])
+def generateImg(result, path = "./"):
     Company, Price = zip(*result)
-
     plt.bar(Company, Price)
     plt.xlabel('Company')
     plt.ylabel('Max Price')
     plt.title('top10MostExpensiveIndiaYear.png')
     plt.xticks(rotation=45, ha="right")
-    plt.savefig('top10MostExpensiveIndiaYear.png')
+    plt.savefig(os.path.join(path, 'top10MostExpensiveIndiaYear.png'))
+
+if __name__ == "__main__":
+    if len(sys.argv) < 3:
+        print("Usage: spark-submit top10MostExpensiveIndiaYear.py <dataset dir> <year>")
+        exit(0)
+
+    result = top10MostExpensiveIndiaYear(sys.argv[1], sys.argv[2])
+    print(result)
+
+    if len(sys.argv) > 3:
+        generateImg(result,sys.argv[3])
+    else:
+        generateImg(result)
+    

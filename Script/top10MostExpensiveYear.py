@@ -17,16 +17,24 @@ def top10MostExpensiveYear(dir, year):
 
     return result[:10]
 
-if __name__ == "__main__":
-    if len(sys.argv) < 3:
-        print("Usage: spark-submit top10MostExpensiveYear.py <dataset dir> <year>")
-
-    result = top10MostExpensiveYear(sys.argv[1], sys.argv[2])
+def generateImg(result, path = "./"):
     Company, Price = zip(*result)
-
     plt.bar(Company, Price)
     plt.xlabel('Company')
     plt.ylabel('Max Price')
     plt.title('top10MostExpensiveYear.png')
     plt.xticks(rotation=45, ha="right")
-    plt.savefig('top10MostExpensiveYear.png')
+    plt.savefig(os.path.join(path, 'top10MostExpensiveYear.png'))
+
+if __name__ == "__main__":
+    if len(sys.argv) < 3:
+        print("Usage: spark-submit top10MostExpensiveYear.py <dataset dir> <year>")
+
+    result = top10MostExpensiveYear(sys.argv[1], sys.argv[2])
+    print(result)
+
+    if len(sys.argv) > 3:
+        generateImg(result,sys.argv[3])
+    else:
+        generateImg(result)
+    

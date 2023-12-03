@@ -23,23 +23,30 @@ def top10MostExpensiveChina(dir):
             result.append((file.split(".")[0], maxprice))
 
     result = sorted(result, key=lambda x : x[1], reverse=True)
-
-    #print(result[:10])
-
+    
     spark.stop()
 
     return result[:10]
 
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: spark-submit top10MostExpensiveChina.py <dataset dir>")
-
-    result = top10MostExpensiveChina(sys.argv[1])
+def generateImg(result, path = "./"):
     Company, Price = zip(*result)
-    
     plt.bar(Company, Price)
     plt.xlabel('Company')
     plt.ylabel('Max Price')
     plt.title('top10MostExpensiveChina')
     plt.xticks(rotation=45, ha="right")
-    plt.savefig('top10MostExpensiveChina.png')
+    plt.savefig(os.path.join(path, 'top10MostExpensiveChina.png'))
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("Usage: spark-submit top10MostExpensiveChina.py <dataset dir>")
+        exit(0)
+
+    result = top10MostExpensiveChina(sys.argv[1])
+    print(result)
+
+    if len(sys.argv) > 2:
+        generateImg(result,sys.argv[2])
+    else:
+        generateImg(result)
+    
