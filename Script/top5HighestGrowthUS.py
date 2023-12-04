@@ -42,8 +42,8 @@ def top5HighestGrowthUS(dir):
 
 
 
-
-print(top5HighestGrowthUS("US"))
+if __name__ == "__main__":
+    print(top5HighestGrowthUS("US"))
 
 
 

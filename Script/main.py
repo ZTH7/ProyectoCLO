@@ -2,6 +2,7 @@ import os
 from top10MostExpensive import top10MostExpensive
 from top10MostExpensiveYear import top10MostExpensiveYear
 from predictionUSYear import predictionUSYear
+from top5HighestGrowthUS import top5HighestGrowthUS
 
 # TODO: cambiar los prints y completar opciones
 
@@ -37,7 +38,14 @@ def main():
             print(us_tops)
 
         elif opcion == "3":
-            pais = input("Ingrese el país: ")
+            pais = input("Ingrese el país (US, China, India): ")
+
+        # ...
+
+        elif opcion == "7":
+            pais = input("Ingrese el país (US, China, India): ")
+            if pais == "US":
+                print(top5HighestGrowthUS(path))
         # ...
 
         elif opcion == "9":
