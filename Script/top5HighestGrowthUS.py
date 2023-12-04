@@ -34,8 +34,6 @@ def top5HighestGrowthUS(dir):
                     ini_value=datas[i].Close
 
             result.append((file, round(max_grow, 2)))
-    for x in result:
-        print("{}\n".format(x))        
     result = sorted(result, key=lambda x : x[1], reverse=True)
     
     spark.stop()
