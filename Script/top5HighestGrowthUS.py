@@ -18,20 +18,18 @@ def top5HighestGrowthUS(dir):
             window = Window.partitionBy("n").orderBy(df.Year, df.Month)
             df = df.withColumn("prev_value", f.lag(f.col("Close")).over(window)) # creamos una columna con el valor anterior de Close
             df = df.where(df.prev_value.isNull() |(df.Close>df.prev_value))#quitamos las filas que este vacio el valor inicial 
-            df = df.drop("n").drop("prev_value")
+            df = df.drop("n")
             max_grow = 0 
-            datas = df.collect()
-            ini_value=datas[0].Close
+            datas = df.collect()     
             ini_pos = 0 
-
+            if(len(datas)!= 0):
+                ini_value=datas[0].Close
             for i in range(1,len(datas)):
-                if abs(datas[i-1].Month-datas[i].Month)%10==1:
-                    grow=((datas[i].Close-ini_value)/ini_value*100)/(i-ini_pos)
-                         
-                    max_grow = max(grow,max_grow)
-                else:
-                    ini_pos=i
-                    ini_value=datas[i].Close
+                if abs(datas[i-1].Month-datas[i].Month)%10!=1:
+                    ini_pos=i-1
+                    ini_value=datas[i].prev_value
+                grow=((datas[i].Close-ini_value)/ini_value*100)/(i-ini_pos)
+                max_grow = max(grow,max_grow)    
 
             result.append((file, round(max_grow, 2)))
     result = sorted(result, key=lambda x : x[1], reverse=True)
