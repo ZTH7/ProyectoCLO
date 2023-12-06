@@ -31,7 +31,7 @@ def top5HighestGrowthUS(dir):
                 grow=((datas[i].Close-ini_value)/ini_value*100)/(i-ini_pos)
                 max_grow = max(grow,max_grow)    
 
-            result.append((file, round(max_grow, 2)))
+            result.append((os.path.splitext(file)[0], round(max_grow, 2)))
     result = sorted(result, key=lambda x : x[1], reverse=True)
     
     spark.stop()
