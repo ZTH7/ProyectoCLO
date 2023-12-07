@@ -1,7 +1,7 @@
 import os
-from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, max, min
 from pyspark.sql.types import DateType
+from pyspark.sql import SparkSession, functions as f, types ,Window
 
 def predictionUSYear(dir, year):
     spark = SparkSession.builder.appName("predictionUSYear").getOrCreate()
@@ -16,15 +16,17 @@ def predictionUSYear(dir, year):
             df = spark.read.option("header", "true").csv(os.path.join(dir, file))
 
             df = df.withColumn("Date", col("Date").cast(DateType()))
+            df = df.withColumn("Date",f.to_date(f.col("Date"),"dd-MM-yyyy"))# convertimos la columna date en el tipo date
+            df = df.orderBy(f.year("Date").alias("Year"),f.month("Date").alias("Month")) #agrupamos por año y mes
+
             df = df.withColumn("Close", col("Close").cast("float"))
 
             # Filtra por el año especificado
-            # df_filtrado = df.filter(col("Date").between(f"{year}-01-01", f"{year}-12-31"))
+            df_filtrado = df.filter(f.year("Date").alias("Year") == year)
 
             # if df_filtrado.isEmpty() == False:
-            precio_fecha_mas_pequeña = df.collect()[0]["Close"]
-            precio_fecha_mas_grande = df.orderBy(col("Date").desc()).collect()[0]["Close"]
-
+            precio_fecha_mas_pequeña = df_filtrado.collect()[0]["Close"]
+            precio_fecha_mas_grande = df_filtrado.orderBy(col("Date").desc()).collect()[0]["Close"]
             if (precio_fecha_mas_grande - precio_fecha_mas_pequeña > 0):
                 result += 1
 
@@ -33,3 +35,8 @@ def predictionUSYear(dir, year):
     spark.stop()
 
     return probabilidad
+
+
+if __name__ == "__main__":
+    print(predictionUSYear("/../Samples/US_data", 2021))
+

@@ -45,7 +45,7 @@ def main():
         elif opcion == "7":
             pais = input("Ingrese el país (US, China, India): ")
             if pais == "US":
-                print(top5HighestGrowthUS(path))
+                print(top5HighestGrowthUS(path+r"/US_data"))
         # ...
 
         elif opcion == "9":
