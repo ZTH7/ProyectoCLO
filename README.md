@@ -1,7 +1,7 @@
-# ANÁLISIS DE LOS VALORES DE LA BOLSA
+# Stocks Analytics
 
 ## Descripción
-​	El objetivo de este proyecto consiste en analizar los datos de la bolsa de valores de diferentes partes del mundo y con ello sacar conclusiones de las mejores acciones y crear estimaciones de los posibles crecimientos o decrecimientos de las acciones.
+​	El objetivo de este proyecto consiste en analizar los datos de la bolsa de valores de diferentes partes del mundo y con ello sacar conclusiones de las mejores acciones y crear estimaciones de los posibles crecimientos de las acciones.
 
 ## Datasets
   From Kaggle: [Stock US](https://www.kaggle.com/datasets/paultimothymooney/stock-market-data), [Stock China](https://www.kaggle.com/datasets/stevenchen116/stockchina-minute) y [Stock India](https://www.kaggle.com/datasets/debashis74017/stock-market-data-nifty-50-stocks-1-min-data)
