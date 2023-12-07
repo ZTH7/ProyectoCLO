@@ -1,4 +1,4 @@
-# ANÁLISIS DE LOS VALORES DE LA BOLSA
+# Stocks Analytics
 
 ## Descripción
 ​	El objetivo de este proyecto consiste en analizar los datos de la bolsa de valores de diferentes partes del mundo y con ello sacar conclusiones de las mejores acciones y crear estimaciones de los posibles crecimientos o decrecimientos de las acciones.
