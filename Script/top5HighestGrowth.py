@@ -18,4 +18,4 @@ def top5HighestGrowth(dir):
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Usage: spark-submit top5HighestGrowth.py <dataset dir>")
-    top5HighestGrowth(sys.argv[1])
+    print(top5HighestGrowth(sys.argv[1]))

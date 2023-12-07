@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 import os
-from pyspark.sql import SparkSession, functions as f, types ,Window
+import sys
+from pyspark.sql import SparkSession, functions as f, Window
+from matplotlib import pyplot as plt
 
 
 def top5HighestGrowthUS(dir):
@@ -25,13 +27,16 @@ def top5HighestGrowthUS(dir):
             if(len(datas)!= 0):
                 ini_value=datas[0].Close
             for i in range(1,len(datas)):
-                if abs(datas[i-1].Month-datas[i].Month)%10!=1:
-                    ini_pos=i-1
-                    ini_value=datas[i].prev_value
-                grow=((datas[i].Close-ini_value)/ini_value*100)/(i-ini_pos)
-                max_grow = max(grow,max_grow)    
+                try:
+                    if abs(datas[i-1].Month-datas[i].Month)%10!=1:
+                        ini_pos=i-1
+                        ini_value=datas[i].prev_value
+                    grow=((datas[i].Close-ini_value)/ini_value*100)/(i-ini_pos)
+                    max_grow = max(grow,max_grow)    
+                except:
+                    continue
 
-            result.append((os.path.splitext(file)[0], round(max_grow, 2)))
+            result.append((file.split(".")[0], round(max_grow, 2)))
     result = sorted(result, key=lambda x : x[1], reverse=True)
     
     spark.stop()
@@ -39,9 +44,26 @@ def top5HighestGrowthUS(dir):
     return result[:5]    
 
 
+def generateImg(result, path = "./"):
+    Company, Price = zip(*result)
+    plt.bar(Company, Price)
+    plt.xlabel('Company')
+    plt.ylabel('Max Growth')
+    plt.title('top5HighestGrowthUS')
+    plt.xticks(rotation=45, ha="right")
+    plt.savefig(os.path.join(path, 'top5HighestGrowthUS.png'))
+
 
 if __name__ == "__main__":
-    print(top5HighestGrowthUS("US"))
+    if(len(sys.argv)<2):
+        print("Usage: spark-submit top5HighestGrowthUS.py <dataset dir>")
+        exit(0)
+    dir = sys.argv[1]
+    
+    result = top5HighestGrowthUS(dir)
+    print(result)
+
+    generateImg(result)
 
 
 

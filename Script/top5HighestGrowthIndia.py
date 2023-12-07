@@ -2,6 +2,7 @@
 import os
 import sys
 from pyspark.sql import SparkSession, functions as f, Window
+from matplotlib import pyplot as plt
 
 
 def top5HighestGrowthIndia(dir):
@@ -26,17 +27,20 @@ def top5HighestGrowthIndia(dir):
             datas = df.collect()
             ini_pos = 0
             if(len(datas) != 0):
-                ini_value=datas[0].Close
+                ini_value=datas[0].close
 
             for i in range(1,len(datas)):
-                if abs(datas[i-1].Month-datas[i].Month)%10!=1:
-                    ini_pos=i-1
-                    ini_value=datas[i].prev_value
-                grow=((datas[i].Close-ini_value)/ini_value*100)/(i-ini_pos)
-                         
-                max_grow = max(grow,max_grow)    
+                try:
+                    if abs(datas[i-1].Month-datas[i].Month)%10!=1:
+                        ini_pos=i-1
+                        ini_value=datas[i].prev_value
+                    grow=((datas[i].close-ini_value)/ini_value*100)/(i-ini_pos)
 
-            result.append((os.path.splitext(file)[0], round(max_grow, 2)))
+                    max_grow = max(grow,max_grow)
+                except:
+                    continue
+
+            result.append((file.split("_")[0], round(max_grow, 2)))
         
     result = sorted(result, key=lambda x : x[1], reverse=True)
     
@@ -45,10 +49,23 @@ def top5HighestGrowthIndia(dir):
     return result[:5]    
 
 
+def generateImg(result, path = "./"):
+    Company, Price = zip(*result)
+    plt.bar(Company, Price)
+    plt.xlabel('Company')
+    plt.ylabel('Max Growth')
+    plt.title('top5HighestGrowthIndia')
+    plt.xticks(rotation=45, ha="right")
+    plt.savefig(os.path.join(path, 'top5HighestGrowthIndia.png'))
+
 
 if __name__ == "__main__":
     if(len(sys.argv)<2):
-        print("Usage: spark-submit top5HighestGrowthIndia <dataset dir>")
+        print("Usage: spark-submit top5HighestGrowthIndia.py <dataset dir>")
         exit(0)
     dir = sys.argv[1]
-    print(top5HighestGrowthIndia(dir))
+    
+    result = top5HighestGrowthIndia(dir)
+    print(result)
+
+    generateImg(result)

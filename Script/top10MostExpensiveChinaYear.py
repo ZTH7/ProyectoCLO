@@ -15,16 +15,20 @@ def top10MostExpensiveChinaYear(dir, year):
 
     for file in os.listdir(dir):
         if file.endswith(".csv"):
-            df = spark.read.option("header", "true").csv(os.path.join(dir, file))
+            try:
+                df = spark.read.option("header", "true").csv(os.path.join(dir, file))
 
-            df = df.withColumn("_c0", udf((lambda line : re.sub(r'-(.*)', '', line)))("_c0"))
-            df = df.withColumn("close", col("close").cast("float"))
-            df = df.groupBy("_c0").max("close")
+                df = df.filter(col("_c0") == year)
+                df = df.withColumn("_c0", udf((lambda line : re.sub(r'-(.*)', '', line)))("_c0"))
+                df = df.withColumn("close", col("close").cast("float"))
+                df = df.groupBy("_c0").max("close")
 
-            maxprice = df.filter(col("_c0") == year).select("max(close)").collect()[0][0]
-            maxprice = round(float(maxprice), 3)
+                maxprice = df.select("max(close)").collect()[0][0]
+                maxprice = round(float(maxprice), 3)
 
-            result.append((file.split(".")[0], maxprice))
+                result.append((file.split(".")[0], maxprice))
+            except:
+                continue
 
     result = sorted(result, key=lambda x : x[1], reverse=True)
 
