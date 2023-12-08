@@ -18,8 +18,8 @@ def top10MostExpensiveIndiaYear(dir, year):
             try:
                 df = spark.read.option("header", "true").csv(os.path.join(dir, file))
 
-                df = df.filter(col("date") == year)
                 df = df.withColumn("date", udf((lambda line : re.sub(r'-(.*)', '', line)))("date"))
+                df = df.filter(col("date") == year)
                 df = df.withColumn("close", col("close").cast("float"))
                 df = df.groupBy("date").max("close")
 
