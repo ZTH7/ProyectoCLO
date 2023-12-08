@@ -12,7 +12,7 @@ def top5HighestGrowth(dir):
 
     result = sorted(result, key=lambda x : x[1], reverse=True)
 
-    return result[:10]
+    return result[:5]
 
 
 if __name__ == "__main__":
