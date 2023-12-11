@@ -15,12 +15,15 @@ def top10MostExpensiveIndia(dir):
 
     for file in os.listdir(dir):
         if file.endswith(".csv"):
-            df = spark.read.option("header", "true").csv(os.path.join(dir, file))
+            try:
+                df = spark.read.option("header", "true").csv(os.path.join(dir, file))
+                df = df.withColumn("close", col("close").cast("float"))
+                maxprice = df.agg(max(col("close"))).collect()[0][0]
+                maxprice = round(float(maxprice), 3)
 
-            maxprice = df.agg(max(col("close"))).collect()[0][0]
-            maxprice = round(float(maxprice), 3)
-
-            result.append((file.split("_")[0], maxprice))
+                result.append((file.split("_")[0], maxprice))
+            except:
+                continue
 
     result = sorted(result, key=lambda x : x[1], reverse=True)
 

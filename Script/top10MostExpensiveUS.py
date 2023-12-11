@@ -15,12 +15,15 @@ def top10MostExpensiveUS(dir):
 
     for file in os.listdir(dir):
         if file.endswith(".csv"):
-            df = spark.read.option("header", "true").csv(os.path.join(dir, file))
+            try:
+                df = spark.read.option("header", "true").csv(os.path.join(dir, file))
+                df = df.withColumn("Close", col("Close").cast("float"))
+                maxprice = df.agg(max(col("Close"))).collect()[0][0]
+                maxprice = round(float(maxprice), 3)
 
-            maxprice = df.agg(max(col("Close"))).collect()[0][0]
-            maxprice = round(float(maxprice), 3)
-
-            result.append((file.split(".")[0], maxprice))
+                result.append((file.split(".")[0], maxprice))
+            except: 
+                continue
 
     result = sorted(result, key=lambda x : x[1], reverse=True)
 
@@ -40,6 +43,7 @@ def generateImg(result, path = "./"):
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Usage: spark-submit top10MostExpensiveUS.py <dataset dir>")
+        exit(0)
 
     result = top10MostExpensiveUS(sys.argv[1])
     print(result)

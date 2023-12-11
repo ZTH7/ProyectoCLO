@@ -1,8 +1,8 @@
 import os
 import sys
-import re
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, max, udf
+from pyspark.sql.functions import col, to_date
+import pyspark.sql.functions as f
 from matplotlib import pyplot as plt
 
 
@@ -18,10 +18,10 @@ def top10MostExpensiveUSYear(dir, year):
             try:
                 df = spark.read.option("header", "true").csv(os.path.join(dir, file))
 
-                df = df.withColumn("Date", udf((lambda line : re.sub(r'(.*)-', '', line)))("Date"))
-                df = df.filter(col("Date") == year)
+                df = df.withColumn("date", to_date(df[0],"dd-MM-yyyy"))
                 df = df.withColumn("Close", col("Close").cast("float"))
-                df = df.groupBy("Date").max("Close")
+                df = df.groupBy(f.year("date").alias("Year")).max("Close")
+                df = df.where(df.Year==year)
 
                 maxprice = df.select("max(Close)").collect()[0][0]
                 maxprice = round(float(maxprice), 3)
@@ -36,23 +36,24 @@ def top10MostExpensiveUSYear(dir, year):
 
     return result[:10]
 
-def generateImg(result, path = "./"):
+def generateImg(result, year, path = "./"):
     Company, Price = zip(*result)
     plt.bar(Company, Price)
     plt.xlabel('Company')
     plt.ylabel('Max Price')
-    plt.title('top10MostExpensiveUSYear.png')
+    plt.title('top 10 Most Expensive US Year '+year)
     plt.xticks(rotation=45, ha="right")
-    plt.savefig(os.path.join(path, 'top10MostExpensiveUSYear.png'))
+    plt.savefig(os.path.join(path, 'top10MostExpensiveUSYear'+year+'.png'))
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
         print("Usage: spark-submit top10MostExpensiveUSYear.py <dataset dir> <year>")
+        exit(0)
 
     result = top10MostExpensiveUSYear(sys.argv[1], sys.argv[2])
     print(result)
 
     if len(sys.argv) > 3:
-        generateImg(result,sys.argv[3])
+        generateImg(result, sys.argv[2], sys.argv[3])
     else:
-        generateImg(result)
+        generateImg(result, sys.argv[2])

@@ -17,7 +17,7 @@ def top10MostExpensiveChina(dir):
         if file.endswith(".csv"):
             try:
                 df = spark.read.option("header", "true").csv(os.path.join(dir, file))
-
+                df = df.withColumn("close", col("close").cast("float"))
                 maxprice = df.agg(max(col("close"))).collect()[0][0]
                 maxprice = round(float(maxprice), 3)
 
