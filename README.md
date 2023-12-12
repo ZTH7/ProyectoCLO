@@ -4,7 +4,7 @@
 ​	El objetivo de este proyecto consiste en analizar los datos de la bolsa de valores de diferentes partes del mundo y con ello sacar conclusiones de las mejores acciones y crear estimaciones de los posibles crecimientos de las acciones.
 
 ## Datasets
-  From Kaggle: [Stock US](https://www.kaggle.com/datasets/paultimothymooney/stock-market-data), [Stock China](https://www.kaggle.com/datasets/stevenchen116/stockchina-minute) y [Stock India](https://www.kaggle.com/datasets/debashis74017/stock-market-data-nifty-50-stocks-1-min-data)
+  Obtenidos de Kaggle: [Stock US](https://www.kaggle.com/datasets/paultimothymooney/stock-market-data), [Stock China](https://www.kaggle.com/datasets/stevenchen116/stockchina-minute) y [Stock India](https://www.kaggle.com/datasets/debashis74017/stock-market-data-nifty-50-stocks-1-min-data)
 
   Hay disponibles dos versiones más pequeñas de este conjunto de datos (1 MB cada una) cargadas en este repositorio (./Samples).
 
@@ -30,7 +30,7 @@ $ spark-submit <script>
 ```
 
 ## Ejecuta PySpark por Google Cloud
-​	Deberá descargar todos los archivos del repositorio en local, crear un BUCKET en Google Cloud y subir todos los archivos allí. Después de subir todos los archivos. Crará el cluster con el siguiente comando en la terminal de Google Cloud:
+​	Deberá descargar todos los archivos del repositorio en local, crear un BUCKET en Google Cloud y subir todos los archivos allí. Después de subir todos los archivos. Creará el cluster con el siguiente comando en la terminal de Google Cloud:
 ```shell
 $ gcloud dataproc clusters create example-cluster --region europe-west6 --enable-component-gateway --master-boot-disk-size 50GB --worker-boot-disk-size 50GB
 ```
@@ -55,29 +55,30 @@ $ spark-submit <nombre_archivo.py> [argumentos]
 $ python main.py
 ```
 
-  Sino también se puede ejecutar con el siguiente comando:
+  Si no también se puede ejecutar con el siguiente comando:
 
 ```
 $ python3 main.py
 ```
 
-**Importante**:¨Este comando se debe ejecutar sin haber activado el ambiente de Python.
+**Importante**:¨Este comando se debe ejecutar sin haber activado el entorno de Python.
 
-  Desde *main.py* los scripts se ejecutan en Spark en modo local y antes de mostrar las opciones se pide al usuario que introduzca el número de cores de su procesador que desea utilizar para la ejecución. Si el usuario desea ejecutar la aplicación en Google Cloud, más adelante se explica cómo hacerlo.
+  Desde el *main.py*, los scripts se ejecutan en Spark en modo local y antes de mostrar las opciones se pide al usuario que introduzca el número de cores de su procesador que desea utilizar para la ejecución. Si el usuario desea ejecutar la aplicación en Google Cloud, más adelante se explica cómo hacerlo.
 
   Después de elegir el número de cores, se mostrará por pantalla un menú como éste:
 
 ```shell
-Menú:
-1. Ver 10 acciones más caras históricamente
-2. Ver 10 acciones más caras en un determinado <year>
-3. Ver 10 acciones más caras en un determinado <country> históricamente
-4. Ver 10 acciones más caras en un determinado <country> en un determinado <year>
-5. Ver 5 acciones con mayor crecimiento históricamente
-6. Ver 5 acciones con mayor crecimiento en un determinado <year>
-7. Ver 5 acciones con mayor crecimiento en un determinado <country> históricamente
-8. Ver 5 acciones con mayor crecimiento en un determinado <country> en un determinado <year>
-9. Ver cuál es la probabilidad de que una acción aumente de valor en un determinado <year>
+Menu:
+1. View the 10 historically most expensive stocks
+2. View the 10 most expensive stocks in a specific <year>
+3. View the 10 most expensive stocks in a specific <country> historically
+4. View the 10 most expensive stocks in a specific <country> in a specific <year>
+5. View the 5 stocks with the highest historical growth
+6. View the 5 stocks with the highest growth in a specific <year>
+7. View the 5 stocks with the highest growth in a specific <country> historically
+8. View the 5 stocks with the highest growth in a specific <country> in a specific <year>
+9. View the probability of a stock increasing in value in a specific <year>
+q : If you want to exit the program
 
-Ingrese el número de la opción que desea:
+Enter the number of the option you want:
 ```
