@@ -61,7 +61,7 @@ $ python main.py
 $ python3 main.py
 ```
 
-**Importante**:¨Este comando se debe ejecutar sin haber activado el entorno de Python.
+**Importante**:Este comando se debe ejecutar sin haber activado el entorno de Python.
 
   Desde el *main.py*, los scripts se ejecutan en Spark en modo local y antes de mostrar las opciones se pide al usuario que introduzca el número de cores de su procesador que desea utilizar para la ejecución. Si el usuario desea ejecutar la aplicación en Google Cloud, más adelante se explica cómo hacerlo.
 
