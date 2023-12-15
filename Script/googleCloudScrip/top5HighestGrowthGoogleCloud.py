@@ -148,11 +148,11 @@ def top5HighestGrowth(bucket_name):
     for blob in blobs_all:  
         file = f"gs://{bucket_name}/{blob.name}"
         if blob.name.endswith('.csv'):
-            if blob.name.startswith('US') :
+            if blob.name.startswith('Samples/US_data') :
                 list_dirUS.append(file)
-            elif blob.name.startswith('china'):
+            elif blob.name.startswith('Samples/China_data'):
                 list_dirChina.append(file)
-            elif blob.name.startswith('india'):
+            elif blob.name.startswith('Samples/India_data'):
                 list_dirIndia.append(file)        
     result=[]
     result.extend(top5HighestGrowthUS(list_dirUS))
