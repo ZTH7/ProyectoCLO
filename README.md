@@ -38,7 +38,8 @@ $ gcloud dataproc clusters create example-cluster --region europe-west6 --enable
 
 ```shell
 $ BUCKET=gs://<your bucket name>
-$ gcloud dataproc jobs submit pyspark --cluster example-cluster --region=europe-west6 $BUCKET/Script/main.py -- $BUCKET/Samples $BUCKET/Result
+$ gcloud dataproc jobs submit pyspark --cluster example-cluster --region=europe-west6 $BUCKET/googleCloudScrip/top10MostExpensiveGoogleCloud.py -- <your bucket name>
+$ gcloud dataproc jobs submit pyspark --cluster example-cluster --region=europe-west6 $BUCKET/googleCloudScrip/top5HighestGrowthGoogleCloud.py -- <your bucket name>
 ```
 
 ## Ejecución
